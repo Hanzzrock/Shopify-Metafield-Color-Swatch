@@ -1,0 +1,68 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+{% if product.metafields.custom.varient_color != blank %}
+<span id="color-tag" class="product-form__quantity-label color-tag">Color: <b style="margin-left:5px;">{{product.metafields.custom.varient_color}}</b></span>
+{% endif %}
+{% if product.metafields.custom.varient_style != blank %}
+<span id="color-tag" class="product-form__quantity-label color-tag">Style: <b style="margin-left:5px;">{{product.metafields.custom.varient_style }}</b></span>
+{% endif %}
+<div class="related-products">
+<ul class="recommended_products">
+  {% assign recommended_products =  product.metafields.my_fields.rec_products.value %}
+  {% for product in recommended_products  %}
+
+    <li>
+     
+      <a href="{{ product.url }}" title="{% if product.metafields.custom.varient_color != blank %}{{product.metafields.custom.varient_color}}{% endif %} 
+{% if product.metafields.custom.varient_style != blank %}{{product.metafields.custom.varient_style }}{% endif %}">
+    {% if product.metafields.custom.varient_color != blank %}
+       {{ product.featured_image | image_url: width: 60 | image_tag: loading: 'lazy', class: 'color-tag', alt: product.metafields.custom.varient_color }}
+     {% endif %}
+     {% if product.metafields.custom.varient_style  != blank %}
+       {{ product.featured_image | image_url: width: 60 | image_tag: loading: 'lazy', class: 'color-tag', alt: product.metafields.custom.varient_style }}
+     {% endif %} 
+      </a>
+    </li>
+    
+   
+  
+   
+  {% endfor %}
+</ul>
+</div>
+<style>
+.related-products ul {
+    display: grid;
+    list-style: none;
+    margin: 0 auto;
+    gap: 38px;
+    padding: 0;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+.related-products ul li:nth-child(1) {
+    border: 1px solid;
+}
+.related-products ul li {
+    padding: 0.4em;
+    border: 1px solid #dcdcdca3;
+}
+span.product-form__quantity-label.color-tag {
+    margin-bottom: 20px;
+}
+@media only screen and (max-width: 1199px) {
+.related-products ul {
+    gap: 20px;
+}
+}
+</style>
+<script>
+$(document).ready(function() {
+  var originalText = $('#color-tag b').text(); // Store the original text of the color tag
+  $('.recommended_products a').hover(function() {
+    var color = $(this).find('img').attr('alt'); // Get the alt text of the image
+    $('#color-tag b').text(color); // Update the text in the color tag
+  }, function() {
+    $('#color-tag b').text(originalText); // Restore the original text of the color tag
+  });
+});
+
+</script>
